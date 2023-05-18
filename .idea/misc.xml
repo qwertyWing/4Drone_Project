@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2025" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/edit_style.xml" value="0.3245" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/ic_baseline_escalator_warning_24.xml" value="0.2055" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/ic_baseline_home.xml" value="0.1955" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/ic_baseline_mypage.xml" value="0.2025" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/ic_baseline_search.xml" value="0.2025" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/drawable/side_nav_bar.xml" value="0.2055" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment.xml" value="0.1875" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_home.xml" value="0.1875" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_my_page.xml" value="0.275" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_pose_ddetect.xml" value="0.21041666666666667" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_pose_detect.xml" value="0.275" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_search.xml" value="0.1875" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_search1.xml" value="0.21041666666666667" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/fragment_serach.xml" value="0.275" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/home.xml" value="0.21693840579710144" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/login.xml" value="0.25" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/login_membership.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/login_new_pw.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/login_pwreplace.xml" value="0.2140625" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/login_pwsearch.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/main.xml" value="0.3260416666666667" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/membership.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/nav_header_main.xml" value="0.21041666666666667" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/pop.xml" value="0.19635416666666666" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/pose_detect.xml" value="0.21302083333333333" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/pulluptrain_xml.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/pushuptrain_xml.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/layout/sqrttrain_xml.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/knuser/AndroidStudioProjects/best_of_best/app/src/main/res/menu/bottom_menu.xml" value="0.1875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
