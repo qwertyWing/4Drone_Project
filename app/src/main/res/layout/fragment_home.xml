@@ -1,27 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="30dp"
+        android:background="@drawable/side_nav_bar">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_launcher_round" />
+        
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="8">
+        android:layout_height="450dp"
+        android:layout_weight="2"
+        android:background="@drawable/side_nav_bar"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="30dp">
 
-        <Button
-            android:id="@+id/Btn_Start"
+        <com.github.mikephil.charting.charts.BarChart
+            android:layout_height="300dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="운동 시작"/>
+            android:id="@+id/chart"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="30dp"
+        android:background="@drawable/side_nav_bar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/side_nav_bar">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="유튜브 추천 영상"
+                android:textSize="20dp"
+                android:gravity="center"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="30dp"
+            android:background="@drawable/side_nav_bar">
+            <ImageView
+                android:id="@+id/Image_pushup"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:src="@drawable/push" />
+
+            <ImageView
+                android:id="@+id/Image_pullup"
+                android:layout_width="60dp"
+                android:layout_height="150dp"
+                android:layout_weight="3"
+                android:src="@drawable/pull" />
+
+            <ImageView
+                android:id="@+id/Image_squrt"
+                android:layout_width="60dp"
+                android:layout_height="150dp"
+                android:layout_weight="3"
+                android:src="@drawable/squrt"/>
+        </LinearLayout>
+
+    </LinearLayout>
 </LinearLayout>

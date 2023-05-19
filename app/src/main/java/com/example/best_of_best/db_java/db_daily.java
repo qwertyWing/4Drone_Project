@@ -1,14 +1,21 @@
 package com.example.best_of_best.db_java;
 
-public class db_daily {
-    private String event;
-    private int set;
-    private int count;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
-    public db_daily(String event, int set, int count){
+public class db_daily implements Serializable {
+    private String event;
+    private String set;
+    private String count;
+
+    public db_daily(String event, String set, String count){
         this.event = event;
         this.set = set;
         this.count = count;
+    }
+    public db_daily(){
+
     }
     public String getEvent() {
         return event;
@@ -18,19 +25,29 @@ public class db_daily {
         this.event = event;
     }
 
-    public int getSet() {
+    public String getSet() {
         return set;
     }
 
-    public void setSet(int set) {
+    public void setSet(String set) {
         this.set = set;
     }
 
-    public int getCount() {
+    public String getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    public void setCount(String count) {
         this.count = count;
     }
+
+//    public Map<String, Object> toMap() {
+//
+//        HashMap<String, Object> result = new HashMap<>();
+//        result.put("event", event);
+//        result.put("set", set);
+//        result.put("count", count);
+//
+//        return result;
+//    }
 }

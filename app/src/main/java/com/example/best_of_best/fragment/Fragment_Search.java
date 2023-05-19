@@ -16,6 +16,7 @@ public class Fragment_Search extends Fragment {
 
 //    private View view;
 //    private ImageButton ultra_image;
+    private login_member mem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,13 +25,15 @@ public class Fragment_Search extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            login_member mem = (login_member) bundle.getSerializable("mem");
+            mem = (login_member) bundle.getSerializable("mem");
             // mem 객체를 활용하여 작업 수행
             Toast.makeText(getActivity(), "ID: " + mem.getId(), Toast.LENGTH_SHORT).show();
         }
 
 //        Button btn = (Button) view.findViewById(R.id.bt_signId);
-        startActivity(new Intent(getActivity(), Fragment_mlkit_poseDetect.class));
+        Intent intent = new Intent(getActivity(), Fragment_mlkit_poseDetect.class);
+        intent.putExtra("id", mem.getId());
+        startActivity(intent);
 
 
         return view;

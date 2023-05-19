@@ -6,13 +6,18 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.best_of_best.MainActivity;
 import com.example.best_of_best.R;
 
 public class pop extends Activity {
 
-    TextView txtText;
+    EditText tset_edit;
+    String user_id = "";
+
+    private EditText pop_event, pop_set, pop_count;
 
 
     @Override
@@ -23,20 +28,34 @@ public class pop extends Activity {
         setContentView(R.layout.pop);
 
         //UI 객체생성
-        txtText = (TextView)findViewById(R.id.txtText);
+        tset_edit = (EditText)findViewById(R.id.pop_event);
+
+        pop_event = findViewById(R.id.pop_event);
+        pop_set = findViewById(R.id.pop_set);
+        pop_count = findViewById(R.id.pop_count);
+
 
         //데이터 가져오기
         Intent intent = getIntent();
-        String data = intent.getStringExtra("data");
-        txtText.setText(data);
+        user_id = intent.getStringExtra("id");
+//        tset_edit.setText(data);
     }
 
     //확인 버튼 클릭
     public void mOnClose(View v){
         //데이터 전달하기
-        Intent intent = new Intent();
-        intent.putExtra("result", "Close Popup");
-        setResult(RESULT_OK, intent);
+
+        System.out.println(pop_event.getText() + ", " + pop_set.getText() + ", " + pop_count.getText());
+//        String pop_ev = String.valueOf(pop_event.getText());
+
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("id", user_id);
+        intent.putExtra("event", String.valueOf(pop_event.getText()));
+        intent.putExtra("set", String.valueOf(pop_set.getText()));
+        intent.putExtra("count", String.valueOf(pop_count.getText()));
+        startActivity(intent);
+
+//        setResult(RESULT_OK, intent);
 
         //액티비티(팝업) 닫기
         finish();
