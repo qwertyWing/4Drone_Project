@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.AspectRatio;
+import androidx.camera.core.CameraInfoUnavailableException;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.Preview;
@@ -26,9 +27,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.best_of_best.db_java.db_daily;
+import com.example.best_of_best.db_java.login_member;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.mlkit.vision.common.InputImage;
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private Button stop, start;
     private EditText test_deit;
     private TextView txtResult;
+    private FloatingActionButton fab;
 
     @Nullable
     private ProcessCameraProvider cameraProvider;
@@ -77,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
     private int Pullup_Count = 0;
 
     //갯수 카운팅 더하는 변수
-    private int Add_Push_Count = 0;
-    private int Add_Squrt_Count = 0;
-    private int Add_Pullup_Count = 0;
+    private static int Add_Push_Count = 0;
+    private static int Add_Squrt_Count = 0;
+    private static int Add_Pullup_Count = 0;
 
     // 동작 시작 전
     private boolean isPullUpInProgress = false;
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     private String event;
     private String set;
     private String count;
+    private login_member mem;
 
     // 셋트 카운팅
     private int set_counting = 1;
@@ -122,7 +127,13 @@ public class MainActivity extends AppCompatActivity {
         cameraSelector = new CameraSelector.Builder().requireLensFacing(lensFacing).build();
 
 
-
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(cameraSelector != null) lenschange();
+            }
+        });
 
 
         try {
@@ -140,7 +151,11 @@ public class MainActivity extends AppCompatActivity {
         event = intent.getStringExtra("event");
         set = intent.getStringExtra("set");
         count = intent.getStringExtra("count");
-
+        mem = (login_member) intent.getSerializableExtra("object");
+        if(mem == null){
+            Toast.makeText(getApplicationContext(), "esdsf" + mem.getId(), Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(getApplicationContext(), "efss" , Toast.LENGTH_SHORT).show();
 
 
         Int_Set = Integer.parseInt(set);
@@ -153,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 종료시 db 저장
         // db 넣는부분
-        daily_insert(user_id, event, set, count);
+//        daily_insert(user_id, event, set, count);
 
 
 
@@ -183,16 +198,26 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "End", Toast.LENGTH_SHORT).show();
                 // 디비 넘겨주세요.
                 if(event.equals("Push_up")){
-                    mRootRef.child("daily").child("11").child(now).child("Push_up").setValue(new db_daily("Push_up", "set_counting", "Add_Push_Count"));
-                    finish();
+                    Add_Push_Count += Push_Count;
+                    daily_insert(user_id, event, String.valueOf(set_counting), String.valueOf(Add_Push_Count));
+//                                                                        mRootRef.child("daily").child("11").child(now).child("Push_up").setValue(new db_daily("Push_up", String.valueOf(set_counting), String.valueOf(Add_Push_Count)));
+//                    Toast.makeText(getApplicationContext(), Add_Push_Count, Toast.LENGTH_SHORT).show();
+                    go_home();
                 }
                 if(event.equals("Pull_up")){
-                    mRootRef.child("daily").child("11").child(now).child("Pull_up").setValue(new db_daily("Pull_up", "set_counting", "Add_Push_Count"));
-                    finish();
+                    Add_Pullup_Count += Pullup_Count;
+                    daily_insert(user_id, event, String.valueOf(set_counting), String.valueOf(Add_Pullup_Count));
+//                                                                        mRootRef.child("daily").child("11").child(now).child("Pull_up").setValue(new db_daily("Pull_up", String.valueOf(set_counting), String.valueOf(Add_Pullup_Count)));
+//                    Toast.makeText(getApplicationContext(), Add_Pullup_Count, Toast.LENGTH_SHORT).show();
+
+                    go_home();
                 }
                 if(event.equals("Sqrt")){
-                    mRootRef.child("daily").child("11").child(now).child("Sqrt").setValue(new db_daily("Sqrt", "set_counting", "Add_Squrt_Count"));
-                    finish();
+                    Add_Squrt_Count += Squrt_Count;
+                    daily_insert(user_id, event, String.valueOf(set_counting), String.valueOf(Add_Squrt_Count));
+//                                                                        mRootRef.child("daily").child("11").child(now).child("Sqrt").setValue(new db_daily("Sqrt", String.valueOf(set_counting), String.valueOf(Add_Squrt_Count)));
+//                    Toast.makeText(getApplicationContext(), Add_Squrt_Count, Toast.LENGTH_SHORT).show();
+                    go_home();
                 }
 
             }
@@ -305,10 +330,10 @@ public class MainActivity extends AppCompatActivity {
     //                                                            test_deit.setText(right_ankle_y+ "," +right_shoulder_y);
 
                                                                     // 양쪽 손목이 양쪽 어깨와 비슷한 높이로 올라간 경우 (푸쉬업 동작 종료)
-                                                                    if (right_ankle_y+15 > right_shoulder_y && left_ankle_y+15 > left_shoulder_y && isPushUpInProgress) {
+                                                                    if (right_ankle_y > right_shoulder_y && left_ankle_y > left_shoulder_y && isPushUpInProgress) {
                                                                         Push_Count++;
                                                                         isPushUpInProgress = false;
-                                                                        test_deit.setText("푸쉬업"+Push_Count);
+                                                                        test_deit.setText("푸쉬업 "+Push_Count);
                                                                     }
                                                                 }
                                                                 else if(event.equals("Pull_up")){
@@ -320,11 +345,11 @@ public class MainActivity extends AppCompatActivity {
                                                                     if(right_elbow_y < right_shoulder_y && left_elbow_y < left_shoulder_y && isPullUpInProgress){
                                                                         Pullup_Count++;
                                                                         isPullUpInProgress = false;
-                                                                        test_deit.setText("풀업"+Pullup_Count);
+                                                                        test_deit.setText("풀업 "+Pullup_Count);
                                                                     }
                                                                 }
 
-                                                                else if(event.equals("Squrt")){
+                                                                else if(event.equals("Sqrt")){
                                                                     //모두 계산이 끝난 후 DB에 올릴 예정
     //                                                              //무릎이랑 엉덩이 비교해서 시작
                                                                     if(right_knee_y < right_hip_y && left_knee_y < left_hip_y && !isSquatInProgress){
@@ -334,32 +359,35 @@ public class MainActivity extends AppCompatActivity {
                                                                         Squrt_Count++;
                                                                         isSquatInProgress = false;
                                                                         System.out.println(set + ", " + count+"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333");
-                                                                        test_deit.setText("스쿼트"+Squrt_Count);
+                                                                        test_deit.setText("스쿼트 "+Squrt_Count);
                                                                     }
                                                                 }
                                                                 else{
                                                                     Toast.makeText(getApplicationContext(), "운동이 없습니다.", Toast.LENGTH_SHORT).show();
-                                                                    finish();
+                                                                    go_home();
                                                                 }
 
-                                                                Add_Push_Count += Pullup_Count;
-                                                                Add_Squrt_Count += Squrt_Count;
-                                                                Add_Push_Count += Push_Count;
 
+                                                                System.out.println(String.valueOf(Add_Pullup_Count) + ", " + Add_Squrt_Count);
                                                                 if(Pullup_Count==Int_count || Squrt_Count==Int_count || Push_Count==Int_count){
-
+                                                                    Add_Pullup_Count += Pullup_Count;
+                                                                    Add_Squrt_Count += Squrt_Count;
+                                                                    Add_Push_Count += Push_Count;
+//                                                                    set_counting++;
                                                                     // 디비 넘겨주세요.
                                                                     if(event.equals("Push_up")){
-                                                                        mRootRef.child("daily").child("11").child(now).child("Push_up").setValue(new db_daily("Push_up", "set_counting", "Add_Push_Count"));
+                                                                        daily_insert(user_id, event, String.valueOf(set_counting), String.valueOf(Add_Push_Count));
+//                                                                        mRootRef.child("daily").child("11").child(now).child("Push_up").setValue(new db_daily("Push_up", String.valueOf(set_counting), String.valueOf(Add_Push_Count)));
                                                                     }
                                                                     if(event.equals("Pull_up")){
-                                                                        mRootRef.child("daily").child("11").child(now).child("Pull_up").setValue(new db_daily("Pull_up", "set_counting", "Add_Push_Count"));
+                                                                        daily_insert(user_id, event, String.valueOf(set_counting), String.valueOf(Add_Pullup_Count));
+//                                                                        mRootRef.child("daily").child("11").child(now).child("Pull_up").setValue(new db_daily("Pull_up", String.valueOf(set_counting), String.valueOf(Add_Pullup_Count)));
                                                                     }
                                                                     if(event.equals("Sqrt")){
-                                                                        mRootRef.child("daily").child("11").child(now).child("Sqrt").setValue(new db_daily("Sqrt", "set_counting", "Add_Squrt_Count"));
+                                                                        daily_insert(user_id, event, String.valueOf(set_counting), String.valueOf(Add_Squrt_Count));
+//                                                                        mRootRef.child("daily").child("11").child(now).child("Sqrt").setValue(new db_daily("Sqrt", String.valueOf(set_counting), String.valueOf(Add_Squrt_Count)));
                                                                     }
                                                                     set_counting++;
-
                                                                     Pullup_Count = 0;
                                                                     Squrt_Count = 0;
                                                                     Push_Count = 0;
@@ -370,7 +398,7 @@ public class MainActivity extends AppCompatActivity {
                                                                 Toast.makeText(getApplicationContext(), "할당량이 끝났습니다.", Toast.LENGTH_SHORT).show();
                                                                 cameraProvider.unbindAll();
                                                                 previewView.setVisibility(View.INVISIBLE);
-                                                                finish();
+                                                                go_home();
                                                             }
 
                                                         }catch (Exception e){
@@ -419,12 +447,42 @@ public class MainActivity extends AppCompatActivity {
 //            imageProcessor.stop();
 //        }
     }
-
+    private void lenschange(){
+        if(cameraSelector == null){
+            return;
+        }
+        int newLensFacing =
+                lensFacing == CameraSelector.LENS_FACING_FRONT
+                        ? CameraSelector.LENS_FACING_BACK
+                        : CameraSelector.LENS_FACING_FRONT;
+        CameraSelector newCameraSelector =
+                new CameraSelector.Builder().requireLensFacing(newLensFacing).build();
+        try {
+            if (cameraProvider.hasCamera(newCameraSelector)) {
+                Log.d(TAG, "Set facing to " + newLensFacing);
+                lensFacing = newLensFacing;
+                cameraSelector = newCameraSelector;
+                cameraProvider.unbindAll();
+                bindPreView();
+                bindAnalysis();
+                return;
+            }
+        } catch (CameraInfoUnavailableException e) {
+            // Falls through
+        }
+    }
     private void daily_insert(String id, String event, String set, String count){
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         String now = LocalDate.now().toString();
 
         mRootRef.child("daily").child(id).child(now).child(event).setValue(new db_daily(event, set, count));
 
+    }
+
+    private void go_home(){
+        Intent intent = new Intent(getApplicationContext(), home.class);
+        intent.putExtra("object", mem);
+        startActivity(intent);
+        finish();
     }
 }

@@ -34,6 +34,7 @@
         <activity android:name=".login_file.login_pwsearch"/>
         <activity android:name=".fragment.Fragment_mlkit_poseDetect"/>
         <activity android:name=".home"/>
+        <activity android:name=".login_file.login_id"/>
         <activity android:name=".MainActivity"/>
 
         <activity android:name=".fragment.pop" android:theme="@android:style/Theme.Dialog" />

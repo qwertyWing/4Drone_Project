@@ -48,7 +48,7 @@ public class login_membership extends AppCompatActivity {
         bt_checkPw = findViewById(R.id.bt_checkPw);
         bt_memberSucces = findViewById(R.id.bt_memberSucces);
 
-        Button test = findViewById(R.id.test_bt);
+//        Button test = findViewById(R.id.test_bt);
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
 
         // 아이디 중복
@@ -131,11 +131,11 @@ public class login_membership extends AppCompatActivity {
             }
         });
 
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), ed_signmail.getText().toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        test.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getApplicationContext(), ed_signmail.getText().toString(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }

@@ -8,17 +8,19 @@ import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.best_of_best.MainActivity;
 import com.example.best_of_best.R;
+import com.example.best_of_best.db_java.login_member;
 
 public class pop extends Activity {
 
     EditText tset_edit;
     String user_id = "";
-
+    String user_event = "";
     private EditText pop_event, pop_set, pop_count;
-
+    private login_member mem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +40,44 @@ public class pop extends Activity {
         //데이터 가져오기
         Intent intent = getIntent();
         user_id = intent.getStringExtra("id");
-//        tset_edit.setText(data);
+        user_event = intent.getStringExtra("event");
+        tset_edit.setText(user_event);
+        mem = (login_member) intent.getSerializableExtra("object");
     }
 
     //확인 버튼 클릭
     public void mOnClose(View v){
         //데이터 전달하기
 
-        System.out.println(pop_event.getText() + ", " + pop_set.getText() + ", " + pop_count.getText());
+//        System.out.println(pop_event.getText() + ", " + pop_set.getText() + ", " + pop_count.getText());
 //        String pop_ev = String.valueOf(pop_event.getText());
+        try{
 
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("id", user_id);
-        intent.putExtra("event", String.valueOf(pop_event.getText()));
-        intent.putExtra("set", String.valueOf(pop_set.getText()));
-        intent.putExtra("count", String.valueOf(pop_count.getText()));
-        startActivity(intent);
+            String str = pop_event.getText().toString();
+            int set = Integer.parseInt(pop_set.getText().toString());
+            int count = Integer.parseInt(pop_count.getText().toString());
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.putExtra("id", user_id);
+            intent.putExtra("event", pop_event.getText().toString());
+            intent.putExtra("set",  pop_set.getText().toString());
+            intent.putExtra("count", pop_count.getText().toString());
+            intent.putExtra("object", mem);
+            startActivity(intent);
+            finish();
+        }catch (NumberFormatException  e){
+            Toast.makeText(getApplicationContext(), "잘못된 입력입니다", Toast.LENGTH_SHORT).show();
+        }
+//        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//        intent.putExtra("id", user_id);
+//        intent.putExtra("event", String.valueOf(pop_event.getText()));
+//        intent.putExtra("set", String.valueOf(pop_set.getText()));
+//        intent.putExtra("count", String.valueOf(pop_count.getText()));
+//        startActivity(intent);
 
 //        setResult(RESULT_OK, intent);
 
         //액티비티(팝업) 닫기
-        finish();
     }
 
     @Override

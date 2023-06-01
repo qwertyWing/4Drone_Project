@@ -32,8 +32,12 @@ public class Fragment_Search extends Fragment {
 
 //        Button btn = (Button) view.findViewById(R.id.bt_signId);
         Intent intent = new Intent(getActivity(), Fragment_mlkit_poseDetect.class);
+
+        intent.putExtra("object", mem);
         intent.putExtra("id", mem.getId());
+        Toast.makeText(getActivity(), mem.getId(), Toast.LENGTH_SHORT).show();
         startActivity(intent);
+
 
 
         return view;

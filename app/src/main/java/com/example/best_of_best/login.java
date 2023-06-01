@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.best_of_best.db_java.login_member;
+import com.example.best_of_best.login_file.login_id;
 import com.example.best_of_best.login_file.login_membership;
 import com.example.best_of_best.login_file.login_pwsearch;
 import com.google.firebase.database.DataSnapshot;
@@ -82,6 +83,7 @@ public class login extends AppCompatActivity {
         btn_idsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), login_id.class));
 
             }
         });

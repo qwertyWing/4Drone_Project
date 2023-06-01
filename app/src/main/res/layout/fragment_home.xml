@@ -19,7 +19,7 @@
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:src="@mipmap/ic_launcher_round" />
-        
+
     </LinearLayout>
 
     <LinearLayout
@@ -74,7 +74,7 @@
             <ImageView
                 android:id="@+id/Image_pushup"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="150dp"
                 android:layout_weight="3"
                 android:src="@drawable/push" />
 
@@ -90,7 +90,7 @@
                 android:layout_width="60dp"
                 android:layout_height="150dp"
                 android:layout_weight="3"
-                android:src="@drawable/squrt"/>
+                android:src="@drawable/squrt" />
         </LinearLayout>
 
     </LinearLayout>

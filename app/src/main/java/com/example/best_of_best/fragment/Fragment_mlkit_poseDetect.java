@@ -13,8 +13,10 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,8 +45,16 @@ import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions;
 
+import org.tensorflow.lite.Interpreter;
+import org.tensorflow.lite.Tensor;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -70,10 +80,13 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
     private CameraSelector cameraSelector;
 
     private String mem_id = "";
-    private static boolean detect_flag = true;
-    private static String str_event = "";
+    private login_member mem;
+//    private static boolean detect_flag = true;
+//    private static String str_event = "";
 
-    private int Pullup_Division, Squrt_Division, Pushup_Division;
+    private int Pullup_Division = 0, Squrt_Division = 0, Pushup_Division = 0;
+    private int asdc = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,9 +125,10 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
 
         // flag_search > id 값 받아오기
         Intent get_id_intent = getIntent();
+
         mem_id = get_id_intent.getStringExtra("id");
-
-
+        mem = (login_member) get_id_intent.getSerializableExtra("object");
+        Toast.makeText(getApplicationContext(), "ef" + mem.getId(), Toast.LENGTH_SHORT).show();
 
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +174,11 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
 
         try {
             // detect 부분
-            options = new PoseDetectorOptions.Builder()
+//            options = new PoseDetectorOptions.Builder()
+//                    .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
+//                    .build();
+//            poseDetector = PoseDetection.getClient(options);
+            PoseDetectorOptions options = new PoseDetectorOptions.Builder()
                     .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
                     .build();
             poseDetector = PoseDetection.getClient(options);
@@ -188,7 +206,8 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
 
                     if(mediaImage != null){
                         InputImage de_image =
-                                InputImage.fromMediaImage(mediaImage, image.getImageInfo().getRotationDegrees());
+                                        InputImage.fromMediaImage(mediaImage, image.getImageInfo().getRotationDegrees());
+
 
                         PoseDetectorOptions options =
                                 new PoseDetectorOptions.Builder()
@@ -218,77 +237,158 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
                                                 PoseLandmark left_ankle = pose.getPoseLandmark(27);
                                                 PoseLandmark right_ankle = pose.getPoseLandmark(28);
 
+                                                float left_shoulder_c = left_shoulder.getInFrameLikelihood();
+                                                float right_shoulder_c = right_shoulder.getInFrameLikelihood();
+                                                float left_elbow_c = left_elbow.getInFrameLikelihood();
+                                                float right_elbow_c = right_elbow.getInFrameLikelihood();
+                                                float left_wrist_c = left_wrist.getInFrameLikelihood();
+                                                float right_wrist_c = right_wrist.getInFrameLikelihood();
+                                                float left_hip_c = left_hip.getInFrameLikelihood();
+                                                float right_hip_c = right_hip.getInFrameLikelihood();
+                                                float left_knee_c = left_knee.getInFrameLikelihood();
+                                                float right_knee_c = right_knee.getInFrameLikelihood();
+                                                float left_ankle_c = left_ankle.getInFrameLikelihood();
+                                                float right_ankle_c = right_ankle.getInFrameLikelihood();
+
+                                                float pose_hood[] = {
+                                                        left_shoulder_c, right_shoulder_c, left_elbow_c, right_elbow_c, left_wrist_c, right_wrist_c,
+                                                        left_hip_c, right_hip_c, left_knee_c, right_knee_c, left_ankle_c, right_ankle_c
+                                                };
+
+                                                float left_shoulder_x = left_shoulder.getPosition().x;
+                                                float right_shoulder_x = right_shoulder.getPosition().x;
+                                                float left_elbow_x = left_elbow.getPosition().x;
+                                                float right_elbow_x = right_elbow.getPosition().x;
+                                                float left_wrist_x = left_wrist.getPosition().x;
+                                                float right_wrist_x = right_wrist.getPosition().x;
+                                                float left_hip_x = left_hip.getPosition().x;
+                                                float right_hip_x = right_hip.getPosition().x;
+                                                float left_knee_x = left_knee.getPosition().x;
+                                                float right_knee_x = right_knee.getPosition().x;
+
+
                                                 float left_shoulder_y = left_shoulder.getPosition().y;
                                                 float right_shoulder_y = right_shoulder.getPosition().y;
                                                 float left_elbow_y = left_elbow.getPosition().y;
                                                 float right_elbow_y = right_elbow.getPosition().y;
                                                 float left_wrist_y = left_wrist.getPosition().y;
-                                                float right_wrist_y = right_wrist.getPosition().y;;
+                                                float right_wrist_y = right_wrist.getPosition().y;
                                                 float left_hip_y = left_hip.getPosition().y;
                                                 float right_hip_y = right_hip.getPosition().y;
                                                 float left_knee_y = left_knee.getPosition().y;
                                                 float right_knee_y = right_knee.getPosition().y;
-
                                                 float left_ankle_y = left_ankle.getPosition().y;
                                                 float right_ankle_y = right_ankle.getPosition().y;
 
+//                                                float input [][] = {{left_shoulder_x,left_shoulder_y,right_shoulder_x,right_shoulder_y,left_elbow_x,left_elbow_y,
+//                                                        right_elbow_x,right_elbow_y,left_wrist_x,left_wrist_y,right_wrist_x,right_wrist_y,left_hip_x,left_hip_y,
+//                                                        right_hip_x,right_hip_y,left_knee_x,left_knee_y,right_knee_x,right_knee_y}};
+//                                                float[] output = new float[]{0};
+//                                                Interpreter tflite = getTfliteInterpreter("helpme_model.tflite");
+//                                                tflite.run(input,output);
 
+                                                // 예측된 클래스 중 가장 높은 확률을 가진 클래스 인덱스 찾기
+//                                                int predictedClass = argmax(output);
                                                 // flag 사용 > 처음인식, 인신된 후 운동 조작
                                                 // 구현 해야됨.
-                                                if(detect_flag) {
+                                                if (confidence(pose_hood)){
+//                                                    asdc++;
+//                                                    test_deit.setText("push_up");
+//                                                    if (asdc >= 120) {
+//                                                        // 푸쉬업
+//                                                        cameraProvider.unbindAll();
+//                                                        previewView.setVisibility(View.INVISIBLE);
+//
+//                                                        Intent intent = new Intent(getApplicationContext(), pop.class);
+//                                                        intent.putExtra("event", "Push_up");
+//                                                        intent.putExtra("id", mem_id);
+//                                                        intent.putExtra("object", mem);
+//                                                        startActivityForResult(intent, 1);
+//                                                        finish();
+//                                                    } else {
+////                                                        Pullup_Division = 0;
+////                                                        Squrt_Division = 0;
+//
+////                                                            test_deit.setText("p_reset");
+//                                                    }
                                                     if (right_shoulder_y < right_wrist_y && left_shoulder_y < left_wrist_y) {
+//                                                    test_deit.setText("t4");
+//                                                        if(predictedClass == 1) {
                                                         Pullup_Division++;
-                                                        if(Pullup_Division >= 20){
-                                                            // 풀업
+//                                                        test_deit.setText(String.format(Locale.US, "%.2f", left_wrist.getInFrameLikelihood()));
+                                                        test_deit.setText("squat");
+//                                                        test_deit.setText("pull_up");
+//                                                        // #################################
+//                                                        Thread.sleep(5000);
+//                                                        Intent intent = new Intent(getApplicationContext(), pop.class);
+//                                                        intent.putExtra("event", "Pull_up");
+//                                                        intent.putExtra("object", mem);
+//                                                        intent.putExtra("id", mem_id);
+//
+//                                                        startActivityForResult(intent, 1);
+//                                                        finish();
+//                                                        // ###################################
+
+                                                        if (Pullup_Division >= 120) {
+                                                            // 스퀏
                                                             cameraProvider.unbindAll();
                                                             previewView.setVisibility(View.INVISIBLE);
 
                                                             Intent intent = new Intent(getApplicationContext(), pop.class);
+                                                            intent.putExtra("event", "Sqrt");
+                                                            intent.putExtra("object", mem);
                                                             intent.putExtra("id", mem_id);
+
                                                             startActivityForResult(intent, 1);
                                                             finish();
-                                                        }
-                                                        else{
+                                                        } else {
                                                             Squrt_Division = 0;
                                                             Pushup_Division = 0;
+//                                                            test_deit.setText("P_reset");
                                                         }
-
-                                                    }
-                                                    else if(left_wrist_y == left_ankle_y && right_wrist_y == right_ankle_y){
+//                                                    } else if(predictedClass == 2) {
+                                                    } else if (left_wrist_y == left_ankle_y && right_wrist_y == right_ankle_y) {
                                                         Pushup_Division++;
-                                                        if(Pushup_Division >= 20){
-                                                            // 풀업
+                                                        test_deit.setText("push_up");
+                                                        if (Pushup_Division >= 120) {
+                                                            // 푸쉬업
                                                             cameraProvider.unbindAll();
                                                             previewView.setVisibility(View.INVISIBLE);
 
                                                             Intent intent = new Intent(getApplicationContext(), pop.class);
+                                                            intent.putExtra("event", "Push_up");
                                                             intent.putExtra("id", mem_id);
+                                                            intent.putExtra("object", mem);
                                                             startActivityForResult(intent, 1);
                                                             finish();
-                                                        }
-                                                        else{
+                                                        } else {
                                                             Pullup_Division = 0;
                                                             Squrt_Division = 0;
+//                                                            test_deit.setText("p_reset");
                                                         }
-                                                    }
-                                                    else if(right_knee_y > right_hip_y && left_knee_y > left_hip_y){
+//                                                    }else if(predictedClass == 3){
+                                                    } else if (right_knee_y > right_hip_y && left_knee_y > left_hip_y) {
                                                         Squrt_Division++;
-                                                        if(Squrt_Division >= 20){
-                                                            // 풀업
+                                                        test_deit.setText("pull_up");
+//                                                        test_deit.setText("squrt");
+                                                        if (Squrt_Division >= 120) {
+                                                            // 스쿼트
                                                             cameraProvider.unbindAll();
                                                             previewView.setVisibility(View.INVISIBLE);
 
                                                             Intent intent = new Intent(getApplicationContext(), pop.class);
+                                                            intent.putExtra("event", "Pull_up");
                                                             intent.putExtra("id", mem_id);
+                                                            intent.putExtra("object", mem);
                                                             startActivityForResult(intent, 1);
                                                             finish();
-                                                        }
-                                                        else{
+                                                        } else {
                                                             Pullup_Division = 0;
                                                             Pushup_Division = 0;
+//                                                            test_deit.setText("s_reset");
                                                         }
                                                     }
-                                                }
+                                              }
 //
                                             }catch (Exception e){
                                                 Log.e("AuthException ERROR: {} ", String.valueOf(e)); //로그남김
@@ -301,11 +401,7 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
                                     new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            // Task failed with an exception
-                                            // ...
-
                                             Toast.makeText(getApplicationContext(), "pose detect fail", Toast.LENGTH_SHORT).show();
-
                                         }
 
                                     });
@@ -334,7 +430,7 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
 //        }
     }
 
-    public void lenschange(){
+    private void lenschange(){
         if(cameraSelector == null){
             return;
         }
@@ -358,49 +454,54 @@ public class Fragment_mlkit_poseDetect extends AppCompatActivity {
             // Falls through
         }
     }
-    private void daily_event_Check(String id, String event){
-
-    }
-
-
-    // daily 접근 코드
 //    private static boolean value_flag = true;
     private void daily_insert(String id, String event, String set, String count){
         DatabaseReference mRootRef = FirebaseDatabase.getInstance().getReference();
         String now = LocalDate.now().toString();
-//        String now = "2023-05-15";
+
         mRootRef.child("daily").child(id).child(now).child(event).setValue(new db_daily(event, set, count));
-//        mRootRef.child("daily").child(id).child(now).child(event).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for(DataSnapshot snapshot1 : snapshot.getChildren()){
-//                    db_daily da = snapshot1.getValue(db_daily.class);
-//
-//                    Toast.makeText(getApplicationContext(), "asdfeve", Toast.LENGTH_SHORT).show();
-//                    if(event.equals(da.getEvent())){
-//                        int nw_set = da.getSet() + set;
-//                        int nw_count = da.getCount() + count;
-//
-//                        da.setCount(nw_count);
-//                        da.setSet(nw_set);
-//
-//                        Map<String, Object> update = new HashMap<>();
-//                        update.put("/daily/"+id+"/"+now+"/", da);
-//
-//                        mRootRef.updateChildren(update);
-//                        value_flag = false;
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
-//
-//        if(value_flag) {
-//            mRootRef.child("daily").child(id).child(now).child(event).setValue(new db_daily(event, set, count));
-//        }
+
     }
+
+    private boolean confidence(float arr[]){
+        for(float value : arr){
+            if(value <0.8) return false;
+        }
+
+        return true;
+    }
+
+    private Interpreter getTfliteInterpreter(String modelPath) {
+        try {
+            return new Interpreter(loadModelFile(Fragment_mlkit_poseDetect.this, modelPath));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public MappedByteBuffer loadModelFile(Activity activity, String modelPath) throws IOException {
+        AssetFileDescriptor fileDescriptor = activity.getAssets().openFd(modelPath);
+        FileInputStream inputStream = new FileInputStream(fileDescriptor.getFileDescriptor());
+        FileChannel fileChannel = inputStream.getChannel();
+        long startOffset = fileDescriptor.getStartOffset();
+        long declaredLength = fileDescriptor.getDeclaredLength();
+        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength);
+    }
+
+    // argmax 함수 정의 (가장 큰 값의 인덱스를 반환)
+    private static int argmax(float[] array) {
+        int maxIndex = 0;
+        float maxValue = array[0];
+        for (int i = 1; i < array.length; i++) {
+            if (array[i] > maxValue) {
+                maxValue = array[i];
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
+    }
+
 }
